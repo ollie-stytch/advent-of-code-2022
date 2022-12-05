@@ -1,25 +1,38 @@
-def get_lines():
+starting_positions = [
+["R","N","F","V","L", "J", "W","M"],
+["P", "N", "D", "Z", "F", "J", "W", "H"],
+["W", "R", "C", "D", "G"],
+["N", "B", "S"],
+["M", "Z", "W", "P", "C", "B", "F", "N"],
+["P", "R", "M", "W"],
+["R", "T", "N", "G", "L", "S", "W"],
+["Q", "T", "H", "F", "N", "B", "V"],
+["L", "M", "H", "Z", "N","F"]
+]
+
+def get_lines(filename):
     lines = []
-    with open('input.txt', encoding='utf8') as f:
+    with open(filename, encoding='utf8') as f:
         for line in f:
             line = line.strip()
             print(line)
             lines.append(line)
     return lines
 
-def is_contained(e1_start, e1_end, e2_start, e2_end):
-    if e1_start >= e2_start and e1_start <= e2_end and e1_end <= e2_end and e1_end >= e2_start:
-        return True
-    return False
+def print_answer():
+    for i in range(len(starting_positions)):
+        print(starting_positions[i][len(starting_positions[i]) - 1])
+
+def make_move(quantity, starting_block, ending_block):
+    for i in range(quantity):
+        starting_positions[ending_block - 1].append(starting_positions[starting_block - 1].pop())
 
 if __name__ == "__main__":
-    lines = get_lines()
-    num_contained_pairs = 0
-    for line in lines:
-        e1_start = int(line.split(',')[0].split('-')[0])
-        e1_end = int(line.split(',')[0].split('-')[1])
-        e2_start = int(line.split(',')[1].split('-')[0])
-        e2_end = int(line.split(',')[1].split('-')[1])
-        if is_contained(e1_start, e1_end, e2_start, e2_end) or is_contained(e2_start, e2_end, e1_start, e1_end):
-            num_contained_pairs += 1
-    print(num_contained_pairs)
+    moves = get_lines("moves.txt")
+    for move in moves:
+        quantity = int(move.split(' ')[1])
+        starting_block = int(move.split(' ')[3])
+        ending_block = int(move.split(' ')[5])
+        make_move(quantity, starting_block, ending_block)
+    print_answer()
+        
